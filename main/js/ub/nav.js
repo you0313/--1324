@@ -61,18 +61,20 @@ function updateLinks() {
     this.newLink.innerText = this.links[i][1];
     document.querySelector(".dropdown-links").appendChild(this.newLink);
 
-    this.newLink.onclick = function () {
+    this.newLink.onclick = async function (event) {
+      event.preventDefault();
       /*this.newFrame = document.createElement("iframe");
       this.newFrame.style.border = "none";
       this.newFrame.style.display = "none";
       this.newFrame.src = "go.html";
       document.body.appendChild(this.newFrame);*/
-      window.navigator.serviceWorker.register('/sw.js', {
-        scope: __uv$config.prefix
-      }).then(() => {
-        console.log("Service worker (for Quick Links) registered.");
-        window.location.href = __uv$config.prefix + this.id; 
-      });
+      try {
+        const address = decodeURIComponent(this.id).split('').map((character, index) => index % 2
+          ? String.fromCharCode(character.charCodeAt(0) ^ 2) : character).join('');
+        await UtopiaProxy.navigate(address);
+      } catch (error) {
+        UtopiaProxy.showError(error);
+      }
     }
   }
 }

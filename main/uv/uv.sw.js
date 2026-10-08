@@ -68,6 +68,13 @@ class UVServiceWorker extends EventEmitter {
             ultraviolet.meta.origin = location.origin;
             ultraviolet.meta.base = ultraviolet.meta.url = new URL(ultraviolet.sourceUrl(request.url));
 
+            if (ultraviolet.meta.url.protocol === 'http:') {
+                ultraviolet.meta.url.protocol = 'https:';
+            }
+            if (!['https:', 'blob:'].includes(ultraviolet.meta.url.protocol)) {
+                throw new Error('HTTPSのWebサイトのみ利用できます。');
+            }
+
             const requestCtx = new RequestContext(
                 request, 
                 this, 
@@ -108,9 +115,10 @@ class UVServiceWorker extends EventEmitter {
 
             const response = await fetch(requestCtx.send);
 
-            if (response.status === 500) {
-                return Promise.reject('');
-            };
+            if (!response.ok) {
+                const error = await response.json().catch(() => null);
+                throw new Error(error && error.message ? error.message : '中継サーバーでエラーが発生しました。');
+            }
 
             const responseCtx = new ResponseContext(requestCtx, response, this);
             const resEvent = new HookEvent(responseCtx, null, null);
@@ -188,8 +196,18 @@ class UVServiceWorker extends EventEmitter {
             });
 
         } catch(err) {
-            return new Response(err.toString(), {
-                status: 500,
+            const message = String(err.message || '安全に接続できませんでした。').replace(/[&<>"']/g, character => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[character]);
+            const navigation = request.destination === 'document' || request.destination === 'iframe';
+            return new Response(navigation ? '<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>接続エラー</title><body><h1>このサイトに接続できませんでした</h1><p>' + message + '</p><p><a href="/main.html">検索画面に戻る</a></p></body></html>' : message, {
+                status: 502,
+                headers: {
+                    'Content-Type': navigation ? 'text/html; charset=utf-8' : 'text/plain; charset=utf-8',
+                    'Cache-Control': 'no-store',
+                    'Referrer-Policy': 'no-referrer',
+                    'Content-Security-Policy': "default-src 'none'; frame-ancestors 'self'",
+                },
             });
         };
     };

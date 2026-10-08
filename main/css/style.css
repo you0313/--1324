@@ -78,6 +78,19 @@ br {
   border-radius: 5px;*/
 }
 
+.proxy-notice, #proxy-error {
+  max-width: 440px;
+  margin: 12px auto;
+  padding: 0 16px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: rgb(175, 190, 195);
+}
+
+#proxy-error {
+  color: rgb(240, 185, 170);
+}
+
 #gamContent {
   margin: auto;
   margin-top: 50px !important;
