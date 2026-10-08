@@ -121,33 +121,19 @@ function cr(url) { // Open Corrosion
   window.location.href = "/beta/" + encodeB64(url);
 }
 */
-function uv(url) { // Open Ultraviolet
-  loading.style.display = "flex";
-  loading.querySelectorAll("span")[1].innerText = "loading content";
-  window.setTimeout(function(){
-    loading.querySelectorAll("span")[1].innerText = "heavy server load may cause slowness";
-  }, 2500);
-  window.setTimeout(function(){
-    loading.querySelectorAll("span")[1].innerHTML = "there might be an error; join our <span style='text-decoration:underline;cursor:pointer;color:rgb(200,200,255);' onclick=\"window.open('https://discord.gg/hFZC5cgsmq', '_blank');\">discord</span> for support";
-  }, 15000);
-  window.navigator.serviceWorker.register('./sw.js', {
-    scope: __uv$config.prefix
-  }).then(() => {
-    this.url = url.trim();
-    if (!isUrl(this.url)) this.url = 'https://www.google.com/search?q=' + this.url;
-    else if (!(this.url.startsWith('https://') || this.url.startsWith('http://'))) this.url = 'http://' + this.url;
-    if(url != ""){
-      if(localStorage.getItem("ab_cloak") == "true") {
-        var tab = window.open('about:blank', '_blank');
-        tab.document.documentElement.innerHTML = '<!DOCTYPE html><html><head><title>' + /*(localStorage.getItem("tabCloakTitle") ? localStorage.getItem("tabCloakTitle") : "Utopia")*/'Utopia' + '</title><link rel="icon" type="image/png" href="' + /*(localStorage.getItem("tabCloakIcon") ? localStorage.getItem("tabCloakIcon") : window.location.origin + "/favicon.ico")*/window.location.origin + "/favicon.ico" + '"><style>body {margin:0;overflow:hidden}</style></head><body><iframe width="100%" height="100%" src="' + window.location.origin + __uv$config.prefix + encodeXor(this.url) + '" frameborder="0"></iframe></body></html>';
-        tab.document.close();
-    
-        window.top.location.replace("https://www.google.com");
-      } else {
-        window.location.href = __uv$config.prefix + encodeXor(this.url);
-      }
-    }
-  });
+async function uv(url) {
+  const output = document.getElementById('proxy-error');
+  if (output) output.textContent = '';
+  if (loading) {
+    loading.style.display = 'flex';
+    loading.querySelectorAll('span')[1].textContent = '安全な接続を準備しています';
+  }
+  try {
+    await UtopiaProxy.navigate(url, localStorage.getItem('ab_cloak') === 'true');
+    if (loading) loading.style.display = 'none';
+  } catch (error) {
+    UtopiaProxy.showError(error);
+  }
 }
 
 function rh() { // Open Rammerhead

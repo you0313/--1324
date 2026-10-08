@@ -12,7 +12,6 @@
   <meta property="og:description" content="An educational website full of school topics and academic resources. The perfect place for students to learn.">
   <meta property="og:image" content="/favicon.ico">
   <title>Utopia</title>
-  <script async src="https://arc.io/widget.min.js#r3Hj6Ygj"></script>
   <script src="https://kit.fontawesome.com/983251336b.js" crossorigin="anonymous"></script>
   <link rel="icon" type="image/png" href="favicon.ico">
   <link href="/css/style.css" rel="stylesheet" type="text/css" />
@@ -25,17 +24,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
   <script src="/js/all.js"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RD0VC48YMW"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9379277470813252" crossorigin="anonymous"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9379277470813252"
-     crossorigin="anonymous"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-RD0VC48YMW');
-  </script>
+  <script src="/js/proxy.js"></script>
 </head>
 <body>
   <script src="uv/uv.bundle.js"></script>
@@ -65,15 +54,11 @@
   <script src="/js/ub/nav.js"></script>
   
   <div class="center">
-    <ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9379277470813252"
-     data-ad-slot="7589529996"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
     <div id="mainContent">
       <span class="title">Utopia</span><br>
-      <input type="text" placeholder="Dive into the web" id="search"><br>
+      <input type="text" placeholder="URLまたは検索語を入力" aria-label="URLまたは検索語" id="search"><br>
+      <p class="proxy-notice" lang="ja">HTTPS通信のみ対応しています。匿名化や危険なサイトの無害化は保証しません。<br>パスワード・決済情報などの入力は避けてください。</p>
+      <p id="proxy-error" role="alert" lang="ja"></p>
       <div id="loading"><span class="loader"></span><span></span></div>
         <!--<a href="settings.html" class="blackBtn" id="set"><span class="material-symbols-outlined">settings</span>&nbsp;Customize settings</a>-->
         <!--<div class="blackBtn" id="blank" style="margin-left:8px;"><span class="material-symbols-outlined">open_in_new</span>&nbsp;Manually open in about:blank</div>-->
@@ -87,9 +72,6 @@
   </div>
   <script src="js/go.js"></script>
 
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
   
   <div class="facts">
     <h1>Schoolwork: ELA, Science, History, Math, Literature, Social Studies, and Writing</h1>

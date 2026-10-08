@@ -29,6 +29,18 @@ These features can be enabled/disabled in the Settings page in Utopia:
 
 ---
 ## 📦 Deployment
+### Netlify
+
+The Netlify configuration publishes `main/` and routes `/bare/` to a serverless relay compatible with the bundled Ultraviolet v1 client. No separate relay server or API key is required. Deploy the repository, open the site over HTTPS, and enter a URL or search term. Service Workers must be enabled in the browser. URL inputs and HTTP resources are upgraded to HTTPS; destinations without working HTTPS are not supported.
+
+The relay checks TLS certificates, permits only port 443, blocks private and reserved IPv4/IPv6 destinations, and pins DNS resolution to the checked address to prevent DNS rebinding. It does not follow redirects internally: redirected requests go through the same validation again. Hop-by-hop and hosting-provider headers are not forwarded. Requests and decompressed responses are limited to 4 MiB, with a 20-second relay timeout. The function declares an IP-based platform rate limit of 600 requests per minute. The site refuses cross-origin browser relay requests and sends no-cache and no-referrer headers. These origin checks are not authentication; the endpoint is still public and hosting usage must be monitored.
+
+This Netlify configuration supports ordinary HTTPS requests, not WebSockets, long-lived connections, large downloads, or every modern website. The browser displays an error when a request is blocked or fails. WebSocket endpoints return an explicit unsupported response rather than pretending to work.
+
+This is **not an anonymity service, malware filter, or security sandbox**. Proxied pages execute through a legacy URL-rewriting engine on this site's origin; the application should not share an origin with sensitive services. Do not use it to enter passwords, payment details, or other confidential information. The relay must handle plaintext content to rewrite it, and the hosting provider may keep infrastructure logs. Cookies and preferences remain in the browser. The site's bundled Arc.io, Google Analytics, and advertising scripts were removed from the top-level application pages, but destination sites and remaining font/icon resources can still contact third parties. A successful HTTPS connection does not prove a destination is trustworthy.
+
+The original `npm start` command still starts the standalone Node server; the security restrictions above describe the new Netlify relay, not that legacy server.
+
 Easily deploy your own instance of Utopia using one of the platforms below:
 
 [![Run on Replit](https://raw.githubusercontent.com/BinBashBanana/deploy-buttons/master/buttons/remade/replit.svg)](https://replit.com/github/UtopiaUnblocker/Utopia)
